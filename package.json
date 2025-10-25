@@ -107,10 +107,14 @@
     "appId": "com.lunatv.app",
     "productName": "LunaTV",
     "files": [
-      "electron/main.js"
+      "electron/main.js",
+      "node_modules/bindings/**/*",
+      "node_modules/file-uri-to-path/**/*"
     ],
     "asarUnpack": [
-      "**/*.node"
+      "**/*.node",
+      "**/bindings/**/*",
+      "**/file-uri-to-path/**/*"
     ],
     "extraResources": [
       {

@@ -12,6 +12,13 @@ const nextConfig = {
 
   experimental: {
     instrumentationHook: process.env.NODE_ENV === 'production',
+    // 确保 better-sqlite3 的依赖被包含在 standalone 输出中
+    outputFileTracingIncludes: {
+      '/': [
+        './node_modules/better-sqlite3/**/*',
+        './node_modules/bindings/**/*',
+      ],
+    },
   },
 
   // Uncoment to add domain whitelist
