@@ -51,6 +51,10 @@ function createServerProcess() {
         // --- 关键：注入 SQLite 路径 ---
         SQLITE_PATH: dbPath,
 
+        // --- 关键：设置管理员账号和密码 ---
+        USERNAME: 'admin',
+        PASSWORD: 'admin', // 与数据库默认密码保持一致
+
         // --- 关键：禁用所有 Redis 变量 ---
         UPSTASH_REDIS_REST_URL: undefined,
         UPSTASH_REDIS_REST_TOKEN: undefined,
