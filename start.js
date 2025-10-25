@@ -24,7 +24,14 @@ function generateManifest() {
 generateManifest();
 
 // 直接在当前进程中启动 standalone Server（`server.js`）
-require('./server.js');
+// 在 Electron 打包后，server.js 在 .next/standalone 目录下
+const serverPath = path.join(__dirname, '.next', 'standalone', 'server.js');
+if (require('fs').existsSync(serverPath)) {
+  require(serverPath);
+} else {
+  // 回退到当前目录的 server.js（用于非 Electron 环境）
+  require('./server.js');
+}
 
 // 每 1 秒轮询一次，直到请求成功
 const TARGET_URL = `http://${process.env.HOSTNAME || 'localhost'}:${process.env.PORT || 3000

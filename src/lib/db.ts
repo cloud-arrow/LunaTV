@@ -13,10 +13,22 @@ const STORAGE_TYPE =
     | 'redis'
     | 'upstash'
     | 'kvrocks'
+    | 'sqlite'
     | undefined) || 'localstorage';
+
 
 // 创建存储实例
 function createStorage(): IStorage {
+  // --- 关键：优先检查 Electron 注入的环境变量 ---
+  if (process.env.SQLITE_PATH) {
+    console.log('检测到 SQLITE_PATH，强制使用 SqliteStorage');
+    // 动态导入, 避免 Webpack 客户端打包
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { SqliteStorage } = require('./sqlite.db');
+    return new SqliteStorage(process.env.SQLITE_PATH);
+  }
+
+  // --- 否则，回退到原有的逻辑 ---
   switch (STORAGE_TYPE) {
     case 'redis':
       return new RedisStorage();
@@ -24,6 +36,14 @@ function createStorage(): IStorage {
       return new UpstashRedisStorage();
     case 'kvrocks':
       return new KvrocksStorage();
+    // --- 我们新加一个 case，虽然上面的 if 已处理，但保持一致性 ---
+    case 'sqlite':
+      if (!process.env.SQLITE_PATH) {
+        console.error('错误：STORAGE_TYPE=sqlite 但未提供 SQLITE_PATH');
+      }
+      // 在非 Electron 环境下，我们也可以从 env 读取路径
+      // 但为了安全，我们只依赖上面的 if
+      return null as unknown as IStorage;
     case 'localstorage':
     default:
       return null as unknown as IStorage;

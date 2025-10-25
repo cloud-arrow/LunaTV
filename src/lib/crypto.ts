@@ -1,6 +1,26 @@
 import CryptoJS from 'crypto-js';
 
 /**
+ * 密码哈希函数
+ * @param password 原始密码
+ * @returns 哈希后的密码
+ */
+export async function hashPassword(password: string): Promise<string> {
+  return CryptoJS.SHA256(password).toString();
+}
+
+/**
+ * 验证密码
+ * @param password 原始密码
+ * @param hashedPassword 哈希后的密码
+ * @returns 密码是否匹配
+ */
+export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  const hashed = CryptoJS.SHA256(password).toString();
+  return hashed === hashedPassword;
+}
+
+/**
  * 简单的对称加密工具
  * 使用 AES 加密算法
  */

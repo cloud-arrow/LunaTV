@@ -2,6 +2,7 @@
   "name": "moontv",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "dev": "pnpm gen:manifest && next dev -H 0.0.0.0",
     "build": "pnpm gen:manifest && next build",
@@ -16,7 +17,10 @@
     "format:check": "prettier -c .",
     "gen:manifest": "node scripts/generate-manifest.js",
     "postbuild": "echo 'Build completed - sitemap generation disabled'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "rebuild:native": "bash scripts/rebuild-native.sh",
+    "dev:electron": "concurrently -k \"cross-env SQLITE_PATH=./dev-lunatv.db pnpm dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "build:electron": "pnpm build && electron-builder --publish never"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -29,12 +33,14 @@
     "@upstash/redis": "^1.25.0",
     "@vidstack/react": "^1.12.13",
     "artplayer": "^5.2.5",
+    "better-sqlite3": "^12.4.1",
     "bs58": "^6.0.0",
     "clsx": "^2.0.0",
     "crypto-js": "^4.2.0",
     "framer-motion": "^12.18.1",
     "he": "^1.2.0",
     "hls.js": "^1.6.10",
+    "knex": "^3.1.0",
     "lucide-react": "^0.438.0",
     "media-icons": "^1.1.5",
     "next": "^14.2.23",
@@ -56,6 +62,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^15.0.7",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/bs58": "^5.0.0",
     "@types/he": "^1.2.3",
     "@types/node": "24.0.3",
@@ -65,6 +72,10 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^38.4.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.23",
     "eslint-config-prettier": "^8.10.0",
@@ -79,6 +90,7 @@
     "prettier-plugin-tailwindcss": "^0.5.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^4.9.5",
+    "wait-on": "^9.0.1",
     "webpack-obfuscator": "^3.5.1"
   },
   "lint-staged": {
@@ -90,5 +102,49 @@
       "prettier -w"
     ]
   },
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.14.0",
+  "build": {
+    "appId": "com.lunatv.app",
+    "productName": "LunaTV",
+    "files": [
+      "electron/main.js"
+    ],
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "extraResources": [
+      {
+        "from": ".next/standalone",
+        "to": "app.asar.unpacked"
+      },
+      {
+        "from": "public",
+        "to": "app.asar.unpacked/public"
+      },
+      {
+        "from": ".next/static",
+        "to": "app.asar.unpacked/.next/static"
+      },
+      {
+        "from": "start.js",
+        "to": "app.asar.unpacked/start.js"
+      },
+      {
+        "from": "scripts",
+        "to": "app.asar.unpacked/scripts"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/logo.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/logo.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/logo.png"
+    }
+  }
 }

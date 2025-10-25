@@ -43,3 +43,12 @@ sitemap-*.xml
 # generated files
 src/lib/runtime.ts
 public/manifest.json
+
+# electron build output
+/dist
+/dist-electron
+
+# sqlite database
+*.db
+*.db-shm
+*.db-wal

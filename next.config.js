@@ -29,7 +29,26 @@ const nextConfig = {
     ],
   },
 
-  webpack(config) {
+  webpack(config, { isServer }) {
+    // 添加 IgnorePlugin 来忽略 Knex 中不需要的数据库驱动
+    // 对服务端和客户端都生效
+    config.plugins = config.plugins || [];
+    config.plugins.push(
+      new (require('webpack')).IgnorePlugin({
+        resourceRegExp: /^(oracledb|mysql|mysql2|pg|pg-query-stream|tedious|sqlite3|mssql|mariadb|pg-native)$/,
+        contextRegExp: /knex/
+      })
+    );
+
+    if (!isServer) {
+      // 客户端完全不需要这些模块
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'knex': false,
+        'better-sqlite3': false,
+      };
+    }
+
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg')
@@ -71,7 +90,7 @@ const nextConfig = {
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
+  disable: true,
   register: true,
   skipWaiting: true,
 });
