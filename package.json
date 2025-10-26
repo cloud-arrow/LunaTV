@@ -82,6 +82,7 @@
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "fs-extra": "^11.3.2",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.5.0",
@@ -107,6 +108,7 @@
   "build": {
     "appId": "com.lunatv.app",
     "productName": "LunaTV",
+    "afterPack": "./scripts/after-pack.js",
     "files": [
       "electron/main.js",
       "node_modules/bindings/**/*",
@@ -120,7 +122,10 @@
     "extraResources": [
       {
         "from": ".next/standalone-copy",
-        "to": "app.asar.unpacked"
+        "to": "app.asar.unpacked",
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "public",

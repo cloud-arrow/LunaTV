@@ -177,6 +177,9 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^2.0.0
         version: 2.0.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)
+      fs-extra:
+        specifier: ^11.3.2
+        version: 11.3.2
       husky:
         specifier: ^7.0.4
         version: 7.0.4

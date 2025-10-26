@@ -30,10 +30,10 @@ function createServerProcess() {
     console.log(`数据库路径设置为: ${dbPath}`);
 
     // 4. 找到我们打包进来的 Next.js 服务器启动脚本
-    //
+    // 在 asar 打包后，__dirname 指向 app.asar/electron
+    // 需要跳出 asar，到 Contents/Resources/app.asar.unpacked
     const serverPath = path.join(
-      __dirname,
-      'resources',
+      process.resourcesPath,
       'app.asar.unpacked',
       'start.js'
     );
@@ -41,7 +41,10 @@ function createServerProcess() {
     console.log(`正在启动服务器: ${serverPath}`);
 
     // 5. 启动服务器进程，并注入环境变量
+    const appDir = path.join(process.resourcesPath, 'app.asar.unpacked');
+    
     serverProcess = fork(serverPath, {
+      cwd: appDir, // 设置工作目录为 app.asar.unpacked
       env: {
         ...process.env,
         NODE_ENV: 'production',
