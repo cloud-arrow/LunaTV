@@ -6,7 +6,7 @@ const fs = require('fs'); // 导入文件系统模块
 
 // 检查是否是生产环境 (即是否已打包成 .exe)
 const isProd = app.isPackaged;
-const port = 3000; // 我们本地服务器的端口
+const port = 30001; // 我们本地服务器的端口
 
 let serverProcess;
 let mainWindow;
@@ -90,7 +90,7 @@ function createWindow() {
   // 根据环境加载不同的 URL
   const appUrl = isProd
     ? `http://127.0.0.1:${port}` // 生产：加载本地服务器
-    : 'http://localhost:3000'; // 开发：加载 dev 服务器
+    : 'http://localhost:30001'; // 开发：加载 dev 服务器
 
   console.log(`正在加载 URL: ${appUrl}`);
   mainWindow.loadURL(appUrl);

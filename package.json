@@ -19,7 +19,7 @@
     "postbuild": "echo 'Build completed - sitemap generation disabled'",
     "prepare": "husky install",
     "rebuild:native": "bash scripts/rebuild-native.sh",
-    "dev:electron": "concurrently -k \"cross-env SQLITE_PATH=./dev-lunatv.db pnpm dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev:electron": "concurrently -k \"cross-env SQLITE_PATH=./dev-lunatv.db PASSWORD=admin USERNAME=admin pnpm dev\" \"wait-on http://localhost:30001 && electron .\"",
     "build:electron": "pnpm build && electron-builder --publish never"
   },
   "dependencies": {

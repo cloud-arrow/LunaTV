@@ -34,7 +34,7 @@ if (require('fs').existsSync(serverPath)) {
 }
 
 // 每 1 秒轮询一次，直到请求成功
-const TARGET_URL = `http://${process.env.HOSTNAME || 'localhost'}:${process.env.PORT || 3000
+const TARGET_URL = `http://${process.env.HOSTNAME || 'localhost'}:${process.env.PORT || 30001
   }/login`;
 
 const intervalId = setInterval(() => {
