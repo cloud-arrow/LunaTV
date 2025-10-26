@@ -23,14 +23,16 @@ function generateManifest() {
 
 generateManifest();
 
-// 直接在当前进程中启动 standalone Server（`server.js`）
-// 在 Electron 打包后，server.js 在 .next/standalone 目录下
-const serverPath = path.join(__dirname, '.next', 'standalone', 'server.js');
+// 在 Electron 打包后，start.js 会被放到 app.asar.unpacked 目录
+// server.js 也在同一个目录，因为整个 standalone-deploy 目录都被复制过去了
+const serverPath = path.join(__dirname, 'server.js');
+
 if (require('fs').existsSync(serverPath)) {
+  console.log(`Using server.js from: ${serverPath}`);
   require(serverPath);
 } else {
-  // 回退到当前目录的 server.js（用于非 Electron 环境）
-  require('./server.js');
+  console.error(`Error: Cannot find server.js at ${serverPath}`);
+  process.exit(1);
 }
 
 // 每 1 秒轮询一次，直到请求成功

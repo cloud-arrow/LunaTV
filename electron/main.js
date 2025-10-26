@@ -48,12 +48,19 @@ function createServerProcess() {
         PORT: port,
         HOSTNAME: '127.0.0.1', // 只允许本地访问
 
+        // --- 关键：设置存储类型为 sqlite ---
+        NEXT_PUBLIC_STORAGE_TYPE: 'sqlite',
+
         // --- 关键：注入 SQLite 路径 ---
         SQLITE_PATH: dbPath,
 
         // --- 关键：设置管理员账号和密码 ---
         USERNAME: 'admin',
         PASSWORD: 'admin', // 与数据库默认密码保持一致
+
+        // --- 豆瓣 CDN 默认使用阿里云 ---
+        NEXT_PUBLIC_DOUBAN_PROXY_TYPE: 'cmliussss-cdn-ali',
+        NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE: 'cmliussss-cdn-ali',
 
         // --- 关键：禁用所有 Redis 变量 ---
         UPSTASH_REDIS_REST_URL: undefined,
