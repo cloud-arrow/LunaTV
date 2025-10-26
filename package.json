@@ -21,7 +21,7 @@
     "rebuild:native": "bash scripts/rebuild-native.sh",
     "dev:electron": "concurrently -k \"cross-env NEXT_PUBLIC_STORAGE_TYPE=sqlite NEXT_PUBLIC_DOUBAN_PROXY_TYPE=cmliussss-cdn-ali NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE=cmliussss-cdn-ali SQLITE_PATH=./dev-lunatv.db PASSWORD=admin USERNAME=admin pnpm dev\" \"wait-on http://localhost:30001 && electron .\"",
     "build:electron": "pnpm build && pnpm copy:standalone && electron-builder --publish never",
-    "copy:standalone": "rm -rf .next/standalone-copy && rsync -aL .next/standalone/ .next/standalone-copy/"
+    "copy:standalone": "node scripts/copy-standalone.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
